@@ -3,7 +3,7 @@ from flask_restplus import Resource
 
 from ..util.dto import ClasseDto
 from ..service.classe_service import (save_new_classe, get_all_classes,
-                                      get_a_classe)
+                                      get_a_classe, filter_classe)
 
 api = ClasseDto.api
 _classe = ClasseDto.classe
@@ -14,6 +14,9 @@ class ClassList(Resource):
     @api.doc('list_of_registered_classes')
     @api.marshal_list_with(_classe, envelope='data')
     def get(self):
+        subject = request.args.get('subject')
+        if subject:
+            return filter_classe(subject)
         """List of all registered classes"""
         return get_all_classes()
 
@@ -32,7 +35,7 @@ class Classe(Resource):
     @api.doc('get a classe')
     @api.marshal_with(_classe)
     def get(self, id):
-        """ get a user given its identifier """
+        """ get a classe given its identifier """
         classe = get_a_classe(id)
         if not classe:
             api.abort(404)

@@ -4,13 +4,19 @@ from app.main.model.user import User
 from app.main.model.class_schedule import ClassSchedule
 
 
-def convert_schedules(schedules):
+def convert_schedules(schedules, class_id):
     for schedule in schedules:
         week_day = schedule['week_day']
         from_hour = convert_hour_to_minutes(schedule['from'])
         to_hour = convert_hour_to_minutes(schedule['to'])
 
-        return from_hour, to_hour, week_day
+        new_schedule = ClassSchedule(
+            week_day=week_day,
+            from_hour=from_hour,
+            to_hour=to_hour,
+            classe_id=class_id
+        )
+        save_changes(new_schedule)
 
 
 def convert_hour_to_minutes(time):
@@ -37,14 +43,7 @@ def save_new_classe(data):
     )
     class_id = save_changes(new_classe)
 
-    new_schedule = ClassSchedule(
-        week_day=convert_schedules(data['schedule'])[2],
-        from_hour=convert_schedules(data['schedule'])[0],
-        to_hour=convert_schedules(data['schedule'])[1],
-        classe_id=class_id
-    )
-
-    save_changes(new_schedule)
+    convert_schedules(data['schedules'], class_id)
 
     response_object = {
         'status': 'sucess',
@@ -59,6 +58,10 @@ def get_all_classes():
 
 def get_a_classe(id):
     return Classe.query.filter_by(id=id).first()
+
+
+def filter_classe(subject):
+    return Classe.query.filter_by(subject=subject).all()
 
 
 def save_changes(data):

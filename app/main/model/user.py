@@ -11,8 +11,8 @@ class User(db.Model):
     whatsapp = db.Column(db.String(255), nullable=False)
     bio = db.Column(db.String(255), nullable=False)
 
-    classe = db.relationship('Classe', backref="user", lazy="dynamic")
-    classe = db.relationship('Connection', backref="user", lazy="dynamic")
+    classe = db.relationship('Classe', backref="user")
+    classe = db.relationship('Connection', backref="user")
 
     def __repr__(self):
         return f"<User '{self.name}'>"

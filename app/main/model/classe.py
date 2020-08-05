@@ -10,7 +10,8 @@ class Classe(db.Model):
     cost = db.Column(db.Float(255), nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    class_schedule = db.relationship('ClassSchedule', backref="classe", lazy="dynamic")
+    class_schedule = db.relationship('ClassSchedule', backref="classe",
+                                     lazy="dynamic")
 
     def __repr__(self):
         return f"<Classe subject:'{self.subject}, cost: {self.cost}'>"
